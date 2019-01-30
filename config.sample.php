@@ -15,6 +15,11 @@ define( 'SECRET_KEY', 'xxxxxxxxxx' );
 define( 'ZIP_FILE_NAME', 'snow-monkey.zip' );
 
 /**
+ * zip ファイルを保存するディレクトリの名前
+ */
+define( 'RELEASES_DIR_NAME', 'releases' );
+
+/**
  * GitHub アクセストークン
  */
 define( 'ACCESS_TOKEN', 'xxxxxxxxxx' );

@@ -44,7 +44,7 @@ function get_remote_zip_url( $data ) {
  * @return string
  */
 function get_package_dir_path( $tag_name ) {
-	return __DIR__ . '/releases/' . $tag_name;
+	return __DIR__ . '/' . RELEASES_DIR_NAME . '/' . $tag_name;
 }
 
 /**
@@ -115,7 +115,7 @@ function get_response_json_path() {
  * @return string
  */
 function get_zip_url( $tag_name ) {
-	return INSTALLATION_URL . '/releases/' . $tag_name . '/' . ZIP_FILE_NAME;
+	return INSTALLATION_URL . '/' . RELEASES_DIR_NAME . '/' . $tag_name . '/' . ZIP_FILE_NAME;
 }
 
 /**
