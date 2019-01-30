@@ -25,12 +25,13 @@ https://設置URL/適当なディレクトリ名/webhook.php と入力
 GitHub Releases からそのリリースを消すためにアクセストークンが必要です。
 https://github.com/settings/tokens から **public_repo** だけを許可したアクセストークンを取得してください。
 
-## config.php の書き換え
-環境にあわせて書き換えてください。
+## config.sample.php の書き換え
+コピペして、`config.php` にリネームの上、環境にあわせて書き換えてください。
 
 ## サーバーへの設置
 ```
 適当なディレクトリ名/
 ├ config.php
+├ lib.php
 └ webhook.php
 ```
