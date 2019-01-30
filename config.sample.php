@@ -2,7 +2,7 @@
 /**
  * 本ライブラリの設置 URL
  */
-define( 'INSTALLATION_URL', 'https://example.com/github-api' );
+define( 'INSTALLATION_URL', 'https://example.com/api' );
 
 /**
  * GitHub Webhooks の設定に入力したシークレットキー

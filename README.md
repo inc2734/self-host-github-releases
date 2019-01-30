@@ -1,3 +1,5 @@
+# Self Host GitHub Releases
+
 GitHub Releases にプロダクトがリリース（タグベース）されたときに、GitHub Webhooks を通して下記の処理をおこないます。
 
 - 自前サーバーにタグ毎にプロダクトの zip を保存
@@ -8,7 +10,7 @@ GitHub Releases にプロダクトがリリース（タグベース）された�
 https://github.com/アカウント名/リポジトリ名/settings/hooks から設定
 
 #### Payload URL
-https://設置URL/github-api/webhook.php と入力
+https://設置URL/適当なディレクトリ名/webhook.php と入力
 
 #### Content type
 **application/json** を選択
@@ -28,7 +30,7 @@ https://github.com/settings/tokens から **public_repo** だけを許可した�
 
 ## サーバーへの設置
 ```
-github-api/
+適当なディレクトリ名/
 ├ config.php
 └ webhook.php
 ```
