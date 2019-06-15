@@ -38,10 +38,8 @@ if ( ! $is_created_response_json ) {
 	exit;
 }
 
-/*
 $is_removed = remove_github_release( $data );
 if ( ! $is_removed ) {
 	error_log( date( '[Y-m-d H:i:s]' ) . ' GitHub release package can not removed: ' . $_SERVER['REMOTE_ADDR'] );
 	exit;
 }
-*/

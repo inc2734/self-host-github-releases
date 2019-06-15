@@ -202,6 +202,7 @@ function remove_github_release( $data ) {
 	curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'DELETE' );
 	curl_setopt( $ch, CURLOPT_HTTPHEADER, [
 		'Authorization: token ' . ACCESS_TOKEN,
+		'User-Agent: ' . GITHUB_USER . '/' . GITHUB_REPOSITORY,
 	] );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, false );
 
