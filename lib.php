@@ -1,6 +1,23 @@
 <?php
 include_once( __DIR__ . '/config.php' );
 
+if ( ! function_exists( 'getallheaders' ) ) {
+	function getallheaders() {
+		$headers = [];
+		foreach ( $_SERVER as $name => $value ) {
+			if ( 'HTTP_' === substr( $name, 0, 5 ) ) {
+				$key = substr( $name, 5 );
+				$key = str_replace( '_', ' ', $key );
+				$key = strtolower( $key );
+				$key = ucwords( $key );
+				$key = str_replace( ' ', '-', $key );
+				$headers[ $key ] = $value;
+			}
+		}
+		return $headers;
+	}
+}
+
 /**
  * Return true when the request is GitHub Webhooks
  *
