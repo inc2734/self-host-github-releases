@@ -100,16 +100,23 @@ function create_package_dir( $tag_name ) {
 function save_zip( $save_dir, $remote_zip_url ) {
 	$zip = $save_dir . '/' . ZIP_FILE_NAME;
 	if ( file_exists( $zip ) ) {
-		unlink( $zip );
+		$renamed = rename( $zip, $zip . '.rename' );
+		if ( ! $renamed ) {
+			return false;
+		}
 	}
 
-	$data       = file_get_contents( $remote_zip_url );
-	$bytes      = file_put_contents( $zip, $data, LOCK_EX );
+	$src        = fopen( $remote_zip_url, 'rb' );
+	$dst        = fopen( $zip, 'wb' );
+	$bytes      = stream_copy_to_stream( $src, $dst );
 	$is_created = ! empty( $bytes );
 
 	if ( ! $is_created ) {
-		if ( file_exists( $zip ) ) {
-			unlink( $zip );
+		if ( file_exists( $zip . '.rename' ) ) {
+			$renamed = rename( $zip . '.rename', $zip );
+			if ( ! $renamed ) {
+				return false;
+			}
 		}
 	}
 
@@ -189,11 +196,30 @@ function create_response_json( $data ) {
  */
 function get_release_data( $data ) {
 	$data = json_decode( $data );
+	if ( ! isset( $data->action ) || 'released' !== $data->action ) {
+		return false;
+	}
 	if ( ! isset( $data->release ) ) {
 		return false;
 	}
 
-	return $data->release;
+	$options = [
+		'http' => [
+			'method' => 'GET',
+			'header' => [
+				'User-Agent: Snow Monkey',
+				'Content-type: application/json; charset=UTF-8',
+			],
+		],
+	];
+	$context = stream_context_create($options);
+	$data = file_get_contents(
+		'https://api.github.com/repos/inc2734/snow-monkey/releases/latest',
+		false,
+		$context
+	);
+
+	return json_decode( $data );
 }
 
 /**
