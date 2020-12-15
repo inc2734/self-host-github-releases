@@ -199,22 +199,30 @@ function get_release_data( $data ) {
 	if ( ! isset( $data->action ) || 'released' !== $data->action ) {
 		return false;
 	}
+
 	if ( ! isset( $data->release ) ) {
 		return false;
 	}
 
-	$options = [
-		'http' => [
-			'method' => 'GET',
-			'header' => [
-				'User-Agent: Snow Monkey',
-				'Content-type: application/json; charset=UTF-8',
+	if ( ! empty( $data->release->assets ) && is_array( $data->release->assets ) ) {
+		return$data->release;
+	}
+
+	$context = stream_context_create(
+		[
+			'http' => [
+				'method' => 'GET',
+				'header' => [
+					'Authorization: token ' . ACCESS_TOKEN,
+					'User-Agent: ' . GITHUB_USER . '/' . GITHUB_REPOSITORY,
+					'Content-type: application/json; charset=UTF-8',
+				],
 			],
-		],
-	];
-	$context = stream_context_create($options);
+		]
+	);
+
 	$data = file_get_contents(
-		'https://api.github.com/repos/inc2734/snow-monkey/releases/latest',
+		'https://api.github.com/repos/' . GITHUB_USER . '/' . GITHUB_REPOSITORY . '/releases/latest',
 		false,
 		$context
 	);
