@@ -124,11 +124,11 @@ function save_zip( $save_dir, $remote_zip_url ) {
 }
 
 /**
- * Return response.json path
+ * Return latest response.json path
  *
  * @return string
  */
-function get_response_json_path() {
+function get_latest_response_json_path() {
 	return __DIR__ . '/response.json';
 }
 
@@ -158,8 +158,18 @@ function create_response_json( $data ) {
 		return false;
 	}
 
-	$response_file = get_response_json_path();
+	$latest_response_file = get_latest_response_json_path();
+	if ( ! file_exists( $latest_response_file ) ) {
+		if ( false === file_put_contents( $latest_response_file, '', LOCK_EX ) ) {
+			return false;
+		}
 
+		if ( false === chmod( $latest_response_file, 0644 ) ) {
+			return false;
+		}
+	}
+
+	$response_file = get_package_dir_path( $release->tag_name ) . '/response.json';
 	if ( ! file_exists( $response_file ) ) {
 		if ( false === file_put_contents( $response_file, '', LOCK_EX ) ) {
 			return false;
@@ -170,22 +180,23 @@ function create_response_json( $data ) {
 		}
 	}
 
-	$release = get_release_data( $data );
-	if ( ! $release ) {
-		return false;
-	}
-
 	$new_zip_url = get_zip_url( $release->tag_name );
 
 	$release->assets[0]->browser_download_url = $new_zip_url;
 
-	$bytes = file_put_contents(
-		get_response_json_path(),
+	$latest_bytes = file_put_contents(
+		$latest_response_file,
 		json_encode( $release, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ),
 		LOCK_EX
 	);
 
-	return ! empty( $bytes );
+	$bytes = file_put_contents(
+		$response_file,
+		json_encode( $release, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ),
+		LOCK_EX
+	);
+
+	return ! empty( $latest_bytes ) && ! empty( $bytes );
 }
 
 /**
